@@ -36,6 +36,10 @@ bool Stack::IsStackFull()
 {
 	return (Index == Size - 1);
 }
+int Stack::GetSize()
+{
+	return Index;
+}
 void Stack::AddElement(int Elem)
 {
 	if (IsStackFull())
@@ -57,6 +61,34 @@ int Stack::DeleteElement()
 void Stack::DeleteAllElements()
 {
 	Index = -1;
+}
+ostream & operator<<(ostream &os, const Stack &v)
+{
+	for (int i = 0; i < v.Index + 1; i++)
+	{
+		if (sizeof(v.Mem[i]) == 4)
+		{
+			if (v.Mem[i] == 43)
+			{
+				cout <<"| "<< "+" << " |\n";
+			}
+			if (v.Mem[i] == 45)
+			{
+				cout << "| " << "-" << " |\n";
+			}
+			if (v.Mem[i] == 42)
+			{
+				cout << "| " << "*" << " |\n";
+			}
+			if (v.Mem[i] == 47)
+			{
+				cout << "| " << "/" << " |\n";
+			}
+		}
+		else
+		cout <<"| "<< v.Mem[i] <<" |\n";
+	}
+	return os;
 }
 
 //Turn
@@ -94,7 +126,6 @@ bool Turn::IsTurnFull()
 {
 	return (LowIndex == (HighIndex + 2) % Size);
 }
-
 void Turn::AddElement(int Elem)
 {
 	if (IsTurnFull())

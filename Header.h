@@ -20,7 +20,6 @@ public:
 	friend ostream & operator<<(ostream &os, const Stack &v);
 };
 
-
 class Turn
 {
 	int * Mem;

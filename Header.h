@@ -13,9 +13,11 @@ public:
 	Stack & operator =(const Stack &b);
 	bool IsStackEmpty();
 	bool IsStackFull();
+	int GetSize();
 	void AddElement(int Elem);
 	int DeleteElement();
 	void DeleteAllElements();
+	friend ostream & operator<<(ostream &os, const Stack &v);
 };
 
 

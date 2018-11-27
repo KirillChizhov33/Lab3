@@ -21,27 +21,10 @@ public:
 	friend ostream & operator<<(ostream &os, const Stack &v);
 };
 
-class Turn
-{
-	int * Mem;
-	int Size;
-	int LowIndex;
-	int HighIndex;
-public:
-	Turn() {};
-	Turn(int _Size);
-	Turn(const Turn &b);
-	bool IsTurnEmpty();
-	bool IsTurnFull();
-	void AddElement(int Elem);
-	int DeleteElement();
-	int & operator [](int index);
-	friend ostream & operator<<(ostream &os, const Turn &v);
-};
-
 class TValue
 {
 public:
+	TValue(){}
 	virtual int prior() = 0;
 };
 
@@ -49,8 +32,8 @@ class Top : public TValue
 {
 public:
 	Top(char c) {};
-	int prior() 
-	{ 
+	int prior()
+	{
 		return 0;
 	}
 };
@@ -65,19 +48,36 @@ public:
 	}
 };
 
-class TQ : public Turn
+class Turn
 {
-public: 
-	void push(TValue *v){}
+	TValue * TMem;
+	int TSize;
+	int LowIndex;
+	int HighIndex;
+public:
+	Turn() {};
+	Turn(int _TSize);
+	Turn(const Turn &b);
+	bool IsTurnEmpty();
+	bool IsTurnFull();
+	void TAddElement(TValue * Elem);
+	TValue & TDeleteElement();
+	TValue  & operator [](int index);
+	friend ostream & operator<<(ostream &os, const Turn &v);
+	void push(TValue *v)
+	{
+
+	}
 
 };
 
+
 class TLex
 {
-	TQ queue;
+	Turn queue;
 	std::string s;
 public:
-	TLex(TQ _queue)
+	TLex(Turn _queue)
 	{
 		queue = _queue;
 	}
@@ -94,7 +94,7 @@ public:
 		}
 		return -1;
 	}
-	TQ & convert(char * str)
+	Turn & convert(char * str)
 	{
 		int st = 0;
 		int i = 0;

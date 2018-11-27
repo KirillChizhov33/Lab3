@@ -66,27 +66,7 @@ ostream & operator<<(ostream &os, const Stack &v)
 {
 	for (int i = 0; i < v.Index + 1; i++)
 	{
-		if (sizeof(v.Mem[i]) == 4)
-		{
-			if (v.Mem[i] == 43)
-			{
-				cout << "| " << "+" << " |\n";
-			}
-			if (v.Mem[i] == 45)
-			{
-				cout << "| " << "-" << " |\n";
-			}
-			if (v.Mem[i] == 42)
-			{
-				cout << "| " << "*" << " |\n";
-			}
-			if (v.Mem[i] == 47)
-			{
-				cout << "| " << "/" << " |\n";
-			}
-		}
-		else
-			cout << "| " << v.Mem[i] << " |\n";
+		os << v.Mem[i] << "\n";
 	}
 	return os;
 }
@@ -94,66 +74,66 @@ ostream & operator<<(ostream &os, const Stack &v)
 //Turn
 
 #include "Header.h"
-Turn::Turn(int _Size)
+Turn::Turn(int _TSize)
 {
-	Size = _Size;
-	if (Size <= 0)
+	TSize = _TSize;
+	if (TSize <= 0)
 	{
 		throw - 1;
 	}
-	Mem = new int[Size];
+	TMem = new TValue [TSize];
 	LowIndex = 0;
-	HighIndex = Size - 1;
+	HighIndex = TSize - 1;
 }
 Turn::Turn(const Turn &b)
 {
-	Size = b.Size;
+	TSize = b.TSize;
 	LowIndex = b.LowIndex;
 	HighIndex = b.HighIndex;
-	Mem = new int[Size];
+	TMem = new TValue[TSize];
 	int i = LowIndex;
 	while (i != HighIndex + 1)
 	{
-		Mem[i] = b.Mem[i];
-		i = (i + 1) % Size;
+		TMem[i] = b.TMem[i];
+		i = (i + 1) % TSize;
 	}
 }
 bool Turn::IsTurnEmpty()
 {
-	return (LowIndex == (HighIndex + 1) % Size);
+	return (LowIndex == (HighIndex + 1) % TSize);
 }
 bool Turn::IsTurnFull()
 {
-	return (LowIndex == (HighIndex + 2) % Size);
+	return (LowIndex == (HighIndex + 2) % TSize);
 }
-void Turn::AddElement(int Elem)
+void Turn::TAddElement(TValue * Elem)
 {
 	if (IsTurnFull())
 	{
 		throw - 2;
 	}
-	HighIndex = (HighIndex + 1) % Size;
-	Mem[HighIndex] = Elem;
+	HighIndex = (HighIndex + 1) % TSize;
+	TMem[HighIndex] = *Elem;
 }
-int Turn::DeleteElement()
+TValue & Turn::TDeleteElement()
 {
 	if (IsTurnEmpty())
 	{
 		throw - 3;
 	}
-	int k = Mem[LowIndex];
-	LowIndex = (LowIndex + 1) % Size;
+	TValue & k = TMem[LowIndex];
+	LowIndex = (LowIndex + 1) % TSize;
 	return k;
 }
-int & Turn::operator [](int index)
+TValue & Turn::operator [](int index)
 {
-	return Mem[index];
+	return TMem[index];
 }
 ostream & operator<<(ostream &os, const Turn &v)
 {
-	for (int i = 0; i < v.Size; i++)
+	for (int i = 0; i < v.HighIndex+1; i++)
 	{
-		cout << v.Mem[i];
+		cout << v.TMem[i] << "\n" ;
 	}
 	return os;
 }

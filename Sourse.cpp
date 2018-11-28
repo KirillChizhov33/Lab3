@@ -81,7 +81,7 @@ Turn::Turn(int _TSize)
 	{
 		throw - 1;
 	}
-	TMem = new TValue [TSize];
+	TMem = new TValue*[TSize];
 	LowIndex = 0;
 	HighIndex = TSize - 1;
 }
@@ -90,9 +90,9 @@ Turn::Turn(const Turn &b)
 	TSize = b.TSize;
 	LowIndex = b.LowIndex;
 	HighIndex = b.HighIndex;
-	TMem = new TValue[TSize];
+	TMem = new TValue*[TSize];
 	int i = LowIndex;
-	while (i != HighIndex + 1)
+	while (i != (HighIndex + 1) % TSize)
 	{
 		TMem[i] = b.TMem[i];
 		i = (i + 1) % TSize;
@@ -113,27 +113,34 @@ void Turn::TAddElement(TValue * Elem)
 		throw - 2;
 	}
 	HighIndex = (HighIndex + 1) % TSize;
-	TMem[HighIndex] = *Elem;
+	TMem[HighIndex] = Elem;
 }
-TValue & Turn::TDeleteElement()
+TValue * Turn::TDeleteElement()
 {
 	if (IsTurnEmpty())
 	{
 		throw - 3;
 	}
-	TValue & k = TMem[LowIndex];
+	TValue * k = TMem[LowIndex];
 	LowIndex = (LowIndex + 1) % TSize;
 	return k;
 }
-TValue & Turn::operator [](int index)
+TValue *& Turn::operator [](int index)
 {
 	return TMem[index];
 }
+
+ostream & operator <<(ostream &os, TValue &v)
+{
+	v.print(os);
+	return os;
+}
+
 ostream & operator<<(ostream &os, const Turn &v)
 {
-	for (int i = 0; i < v.HighIndex+1; i++)
+	for (int i = 0; i < v.HighIndex + 1; i++)
 	{
-		cout << v.TMem[i] << "\n" ;
+		cout << *(v.TMem[i]);
 	}
 	return os;
 }

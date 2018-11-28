@@ -26,31 +26,50 @@ class TValue
 public:
 	TValue(){}
 	virtual int prior() = 0;
+	virtual void print(ostream &os) = 0;
+	friend ostream & operator <<(ostream &os, TValue &v);
 };
+
 
 class Top : public TValue
 {
+	char c;
 public:
-	Top(char c) {};
+	Top(char _c)
+	{
+		c = _c;
+	}
 	int prior()
 	{
 		return 0;
+	}
+	void print(ostream &os)
+	{
+		os << c;
 	}
 };
 
 class Tint : public TValue
 {
+	int v;
 public:
-	Tint(int v) {};
+	Tint(int _v)
+	{
+		v = _v;
+	}
 	int prior()
 	{
 		return 0;
+	}
+	void print(ostream &os)
+	{
+		os << v;
 	}
 };
 
 class Turn
 {
-	TValue * TMem;
+	TValue ** TMem;
 	int TSize;
 	int LowIndex;
 	int HighIndex;
@@ -61,13 +80,9 @@ public:
 	bool IsTurnEmpty();
 	bool IsTurnFull();
 	void TAddElement(TValue * Elem);
-	TValue & TDeleteElement();
-	TValue  & operator [](int index);
+	TValue * TDeleteElement();
+	TValue *& operator [](int index);
 	friend ostream & operator<<(ostream &os, const Turn &v);
-	void push(TValue *v)
-	{
-
-	}
 
 };
 
@@ -89,8 +104,8 @@ public:
 			if (s[i] == c)
 			{
 				return i;
-				i++;
-			}
+				
+			}i++;
 		}
 		return -1;
 	}
@@ -109,14 +124,16 @@ public:
 				if (c == ' ') {}
 				if (pos(op, c) >= 0)
 				{
-					queue.push(new Top(c));
+					queue.TAddElement(new Top(c));
 				}
+				if ((c >= '0') && (c <= '9'))
+				{
+					s = c;
+					st = 1;
+				}
+				continue;
 			}
-			if ((c >= '0') && (c <= '9'))
-			{
-				s = c;
-				st = 1;
-			}
+			
 			if (st == 1)
 			{
 				if ((c >= '0') && (c <= '9'))
@@ -125,20 +142,20 @@ public:
 				}
 				if (c == ' ')
 				{
-					queue.push(new Tint(atoi(s.c_str())));
+					queue.TAddElement(new Tint(atoi(s.c_str())));
 					st = 0;
 				}
 				if (pos(op, c) >= 0)
 				{
-					queue.push(new Tint(atoi(s.c_str())));
-					queue.push(new Top(c));
+					queue.TAddElement(new Tint(atoi(s.c_str())));
+					queue.TAddElement(new Top(c));
 					st = 0;
 				}
 			}
 		}
 		if (st == 1)
 		{
-			queue.push(new Tint(atoi(s.c_str())));
+			queue.TAddElement(new Tint(atoi(s.c_str())));
 			return queue;
 		}
 	}

@@ -155,8 +155,8 @@ public:
 		}
 		if (st == 1)
 		{
-			queue.TAddElement(new Tint(atoi(s.c_str())));
-			return queue;
+			queue.TAddElement(new Tint(atoi(s.c_str())));	
 		}
+		return queue;
 	}
 };

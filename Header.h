@@ -28,6 +28,7 @@ public:
 	virtual int prior() = 0;
 	virtual void print(ostream &os) = 0;
 	friend ostream & operator <<(ostream &os, TValue &v);
+	virtual bool operator ==(const TValue & b) { return true; };
 };
 
 
@@ -47,6 +48,14 @@ public:
 	{
 		os << c;
 	}
+	bool operator ==(const Top & b)
+	{
+		if (c == b.c)
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 class Tint : public TValue
@@ -64,6 +73,14 @@ public:
 	void print(ostream &os)
 	{
 		os << v;
+	}
+	bool operator ==(const Tint & b)
+	{
+		if (v == b.v)
+		{
+			return true;
+		}
+		return false;
 	}
 };
 
@@ -84,7 +101,6 @@ public:
 	TValue * TDeleteElement();
 	TValue *& operator [](int index);
 	friend ostream & operator<<(ostream &os, const Turn &v);
-
 };
 
 

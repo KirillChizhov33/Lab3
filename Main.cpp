@@ -9,8 +9,25 @@ int main()
 	Turn C(100);//Очередь стандартная
 	Turn D(100);//Очередь польская запись
 	char c[100] = "(28-7)*111+23-(67*88)";
-	TLex R(C);
-	C = R.convert(c);
-	cout << C;
+	if (StrCor(c) == false)
+	{
+		cout << "False";
+		return 0;
+	}
+	else
+	{
+		TLex R(C);
+		C = R.convert(c);
+		if (C.IsStringCorrect() == false)
+		{
+			cout << "False";
+			return 0;
+		}
+		else
+		{
+			cout << C;
+		}
+		
+	}
 	return 0;
 }

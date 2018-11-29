@@ -8,10 +8,10 @@ int main()
 	Stack B(100);//Стек для операций
 	Turn C(100);//Очередь стандартная
 	Turn D(100);//Очередь польская запись
-	char c[100] = "(28-7)*111+23-(67*88)";
+	char c[100] = "(28-7)*1-(1)-1+23-(67*88)";
 	if (StrCor(c) == false)
 	{
-		cout << "False";
+		cout << "False 1";
 		return 0;
 	}
 	else
@@ -20,14 +20,10 @@ int main()
 		C = R.convert(c);
 		if (C.IsStringCorrect() == false)
 		{
-			cout << "False";
+			cout << "False 2";
 			return 0;
 		}
-		else
-		{
-			cout << C;
-		}
-		
+		cout << C;
 	}
 	return 0;
 }

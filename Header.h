@@ -24,7 +24,7 @@ public:
 class TValue
 {
 public:
-	TValue(){}
+	TValue() {}
 	virtual int prior() = 0;
 	virtual void print(ostream &os) = 0;
 	friend ostream & operator <<(ostream &os, TValue &v);
@@ -79,6 +79,7 @@ public:
 	Turn(const Turn &b);
 	bool IsTurnEmpty();
 	bool IsTurnFull();
+	bool IsStringCorrect();
 	void TAddElement(TValue * Elem);
 	TValue * TDeleteElement();
 	TValue *& operator [](int index);
@@ -104,8 +105,8 @@ public:
 			if (s[i] == c)
 			{
 				return i;
-				
-			}i++;
+			}
+			i++;
 		}
 		return -1;
 	}
@@ -133,7 +134,6 @@ public:
 				}
 				continue;
 			}
-			
 			if (st == 1)
 			{
 				if ((c >= '0') && (c <= '9'))
@@ -155,8 +155,9 @@ public:
 		}
 		if (st == 1)
 		{
-			queue.TAddElement(new Tint(atoi(s.c_str())));	
+			queue.TAddElement(new Tint(atoi(s.c_str())));
 		}
 		return queue;
 	}
 };
+bool StrCor(char *string);

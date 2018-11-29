@@ -39,7 +39,7 @@ bool Stack::IsStackFull()
 }
 int Stack::GetSize()
 {
-	return Index+1;
+	return Index + 1;
 }
 void Stack::AddElement(int Elem)
 {
@@ -107,33 +107,44 @@ bool Turn::IsTurnFull()
 {
 	return (LowIndex == (HighIndex + 2) % TSize);
 }
-/*bool Turn::IsStringCorrect()
+bool Turn::IsStringCorrect()
 {
 	int i = LowIndex;
-	int cnt = 0;
-	TValue * temp1 = new Top(')');
-	TValue * temp2 = new Top('(');
-	TValue * temp3 = new Top('+');
-	TValue * temp4 = new Top('-');
-	TValue * temp5 = new Top('*');
-	TValue * temp6 = new Top('/');
+	int NumberCnt = 0;
+	int OpCnt = 0;
+	TValue * temp1 = new Top('+');
+	TValue * temp2 = new Top('-');
+	TValue * temp3 = new Top('*');
+	TValue * temp4 = new Top('/');
+	TValue * temp5 = new Top('(');
+	TValue * temp6 = new Top(')');
+	TValue * cnt = new Top(')');
 	while (i != (HighIndex + 1) % TSize)
 	{
-		if (TMem[i] == temp1)
-		{
-			cnt--;
-			if (cnt < 0) { return false; }
-		}
-		if (TMem[i] == temp2)
-		{
-			cnt++;
-		}
-		if ((TMem[i] != temp3) && (TMem[i] != temp4) && (TMem[i] != temp5) && (TMem[i] != temp6) && sizeof(TMem[i]) == 4)
-		{
 
+		if ((*(TMem[i]) == *temp5) || (*(TMem[i]) == *temp6))
+		{
+			i++;
+			continue;
 		}
+		if ((*(TMem[i]) == *temp1) || (*(TMem[i]) == *temp2) || (*(TMem[i]) == *temp3) || (*(TMem[i]) == *temp4))
+		{
+			OpCnt++;
+		}
+		else
+		{
+			NumberCnt++;
+		}
+	i++;
 	}
-}*/
+	cout << NumberCnt << endl;
+	cout << OpCnt;
+	if ((NumberCnt - OpCnt) != 1)
+	{
+		return false;
+	}
+	return true;
+}
 void Turn::TAddElement(TValue * Elem)
 {
 	if (IsTurnFull())
@@ -192,6 +203,8 @@ bool StrCor(char *string)
 	int cnt = 0;
 	char s[] = "+-*/()";
 	char t[] = "+-*/";
+	char k1 = '(';
+	char k2 = ')';
 	if (i == 0)
 	{
 		if (POS(t, string[i]) >= 0)
@@ -211,7 +224,35 @@ bool StrCor(char *string)
 		}
 		if (i > 0)
 		{
-			if ((POS(s, string[i]) >= 0) && (POS(s, string[i - 1]) >= 0))
+			if (((string[i] >= '0') && (string[i] <= '9')) && string[i - 1] == k2)
+			{
+				return false;
+			}
+		}
+		if (i > 0)
+		{
+			if ((POS(t, string[i]) >= 0) && string[i - 1] == k1)
+			{
+				return false;
+			}
+		}
+		if (i > 0)
+		{
+			if ((POS(t, string[i]) >= 0) && string[i + 1] == k2)
+			{
+				return false;
+			}
+		}
+		if (string[i + 1] != '\0')
+		{
+			if (((string[i] >= '0') && (string[i] <= '9')) && string[i + 1] == k1)
+			{
+				return false;
+			}
+		}
+		if (i > 0)
+		{
+			if ((POS(t, string[i]) >= 0) && (POS(t, string[i - 1]) >= 0))
 			{
 				return false;
 			}
@@ -220,7 +261,7 @@ bool StrCor(char *string)
 		{
 			cnt++;
 		}
-		if ((((string[i] >= '0') && (string[i] <= '9')) || (POS(s, string[i]) >= 0))==false)
+		if ((((string[i] >= '0') && (string[i] <= '9')) || (POS(s, string[i]) >= 0)) == false)
 		{
 			return false;
 		}

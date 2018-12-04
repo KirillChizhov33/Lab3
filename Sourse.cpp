@@ -1,16 +1,17 @@
 //Stack
 #include "Header.h"
+#include <typeinfo>
 Stack::Stack(int _Size)
 {
 	Size = _Size;
-	Mem = new int[Size];
+	Mem = new TValue*[Size];
 	Index = -1;
 }
 Stack::Stack(const Stack &b)
 {
 	Size = b.Size;
 	Index = b.Index;
-	Mem = new int[Size];
+	Mem = new TValue*[Size];
 	for (int i = 0; i < Index; i++)
 	{
 		Mem[i] = b.Mem[i];
@@ -22,7 +23,7 @@ Stack & Stack::operator =(const Stack &b)
 	delete[]Mem;
 	Size = b.Size;
 	Index = b.Index;
-	Mem = new int[Size];
+	Mem = new TValue*[Size];
 	for (int i = 0; i < Index; i++)
 	{
 		Mem[i] = b.Mem[i];
@@ -41,7 +42,7 @@ int Stack::GetSize()
 {
 	return Index + 1;
 }
-void Stack::AddElement(int Elem)
+void Stack::AddElement(TValue* Elem)
 {
 	if (IsStackFull())
 	{
@@ -50,7 +51,7 @@ void Stack::AddElement(int Elem)
 	Index++;
 	Mem[Index] = Elem;
 }
-int Stack::DeleteElement()
+TValue * Stack::DeleteElement()
 {
 	if (IsStackEmpty())
 	{
@@ -67,7 +68,7 @@ ostream & operator<<(ostream &os, const Stack &v)
 {
 	for (int i = 0; i < v.Index + 1; i++)
 	{
-		os << v.Mem[i] << "\n";
+		os << *(v.Mem[i]);
 	}
 	return os;
 }
@@ -107,43 +108,85 @@ bool Turn::IsTurnFull()
 {
 	return (LowIndex == (HighIndex + 2) % TSize);
 }
-bool Turn::IsStringCorrect()
+
+Stack Turn::Polish()
 {
-	int i = LowIndex;
-	int NumberCnt = 0;
-	int OpCnt = 0;
+	Stack Result(TSize);
+	Stack Op(TSize);
+	Stack Temp(TSize);
+	Turn test(TSize);
 	TValue * temp1 = new Top('+');
 	TValue * temp2 = new Top('-');
 	TValue * temp3 = new Top('*');
 	TValue * temp4 = new Top('/');
 	TValue * temp5 = new Top('(');
 	TValue * temp6 = new Top(')');
-	TValue * cnt = new Top(')');
+	int i = LowIndex;
 	while (i != (HighIndex + 1) % TSize)
 	{
-
-		if ((*(TMem[i]) == *temp5) || (*(TMem[i]) == *temp6))
+		if ((TMem[i]->prior() == -1))
 		{
-			i++;
-			continue;
-		}
-		if ((*(TMem[i]) == *temp1) || (*(TMem[i]) == *temp2) || (*(TMem[i]) == *temp3) || (*(TMem[i]) == *temp4))
-		{
-			OpCnt++;
+			Result.AddElement(TMem[i]);
 		}
 		else
 		{
-			NumberCnt++;
+			if (Op.IsStackEmpty())
+			{
+				Op.AddElement(TMem[i]);
+			}
+			else
+			{
+				if (TMem[i]->prior() == 0)
+				{
+					Op.AddElement(TMem[i]);
+				}
+				if (TMem[i]->prior() == 1)
+				{
+					Temp = Op;
+					while ((Temp.DeleteElement())->prior() != 0)
+					{
+						Result.AddElement(Op.DeleteElement());
+					}
+					Op.DeleteElement();
+				}
+				if (TMem[i]->prior() == 2)
+				{
+					Temp = Op;
+					if ((Temp.DeleteElement())->prior() == 0)
+					{
+						Op.AddElement(TMem[i]);
+					}
+					if ((Temp.DeleteElement())->prior() >= 2)
+					{
+						Result.AddElement(Op.DeleteElement());
+						Op.AddElement(TMem[i]);
+					}
+				}
+				if (TMem[i]->prior() == 3)
+				{
+					Temp = Op;
+					if ((Temp.DeleteElement())->prior() < 3)
+					{
+						Op.AddElement(TMem[i]);
+					}
+					if ((Temp.DeleteElement())->prior() == 3)
+					{
+						Result.AddElement(Op.DeleteElement());
+						Op.AddElement(TMem[i]);
+					}
+				}
+			}
 		}
-	i++;
+		//cout << Result << "\n";
+		//cout << Op << endl;
+		i++;
 	}
-	cout << NumberCnt << endl;
-	cout << OpCnt;
-	if ((NumberCnt - OpCnt) != 1)
-	{
-		return false;
-	}
-	return true;
+	return Result;
+}
+
+int Turn::TGetSize()
+{
+	return TSize;
 }
 void Turn::TAddElement(TValue * Elem)
 {

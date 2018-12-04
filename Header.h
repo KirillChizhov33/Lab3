@@ -2,25 +2,6 @@
 #include <string>
 #include <iostream>
 using namespace std;
-class Stack
-{
-	int Size;
-	int Index;
-	int * Mem;
-	Stack() {};
-public:
-	Stack(int _Size);
-	Stack(const Stack &b);
-	Stack & operator =(const Stack &b);
-	bool IsStackEmpty();
-	bool IsStackFull();
-	int GetSize();
-	void AddElement(int Elem);
-	int DeleteElement();
-	void DeleteAllElements();
-	friend ostream & operator<<(ostream &os, const Stack &v);
-};
-
 class TValue
 {
 public:
@@ -42,7 +23,22 @@ public:
 	}
 	int prior()
 	{
-		return 0;
+		if (c == '+' || c == '-')
+		{
+			return 2;
+		}
+		if (c == '*' || c == '/')
+		{
+			return 3;
+		}
+		if (c == '(')
+		{
+			return 0;
+		}
+		if (c == ')')
+		{
+			return 1;
+		}
 	}
 	void print(ostream &os)
 	{
@@ -68,7 +64,7 @@ public:
 	}
 	int prior()
 	{
-		return 0;
+		return -1;
 	}
 	void print(ostream &os)
 	{
@@ -83,8 +79,25 @@ public:
 		return false;
 	}
 };
-
-class Turn
+class Stack
+{
+	TValue ** Mem;
+	int Size;
+	int Index;
+public:
+	Stack() {};
+	Stack(int _Size);
+	Stack(const Stack &b);
+	Stack & operator =(const Stack &b);
+	bool IsStackEmpty();
+	bool IsStackFull();
+	int GetSize();
+	void AddElement(TValue *Elem);
+	TValue * DeleteElement();
+	void DeleteAllElements();
+	friend ostream & operator<<(ostream &os, const Stack &v);
+};
+class Turn 
 {
 	TValue ** TMem;
 	int TSize;
@@ -96,7 +109,8 @@ public:
 	Turn(const Turn &b);
 	bool IsTurnEmpty();
 	bool IsTurnFull();
-	bool IsStringCorrect();
+	int TGetSize();
+	Stack Polish();
 	void TAddElement(TValue * Elem);
 	TValue * TDeleteElement();
 	TValue *& operator [](int index);
@@ -177,3 +191,5 @@ public:
 	}
 };
 bool StrCor(char *string);
+
+

@@ -142,8 +142,7 @@ Stack Turn::Polish()
 				}
 				if (TMem[i]->prior() == 1)
 				{
-					Temp = Op;
-					while ((Temp.DeleteElement())->prior() != 0)
+					while ((Op.RetCur())->prior() != 0)
 					{
 						Result.AddElement(Op.DeleteElement());
 					}
@@ -151,36 +150,41 @@ Stack Turn::Polish()
 				}
 				if (TMem[i]->prior() == 2)
 				{
-					Temp = Op;
-					if ((Temp.DeleteElement())->prior() == 0)
+					if ((Op.RetCur())->prior() >= 2)
 					{
+						while ((Op.IsStackEmpty() != true)&&(((Op.RetCur())->prior() >= 2) == true))
+						{
+							Result.AddElement(Op.DeleteElement());
+						}
 						Op.AddElement(TMem[i]);
 					}
-					if ((Temp.DeleteElement())->prior() >= 2)
+					if ((Op.RetCur())->prior() == 0)
 					{
-						Result.AddElement(Op.DeleteElement());
 						Op.AddElement(TMem[i]);
 					}
 				}
 				if (TMem[i]->prior() == 3)
 				{
-					Temp = Op;
-					if ((Temp.DeleteElement())->prior() < 3)
-					{
-						Op.AddElement(TMem[i]);
-					}
-					if ((Temp.DeleteElement())->prior() == 3)
+					if ((Op.RetCur())->prior() == 3)
 					{
 						Result.AddElement(Op.DeleteElement());
+						Op.AddElement(TMem[i]);
+					}
+					if ((Op.RetCur())->prior() < 3)
+					{
 						Op.AddElement(TMem[i]);
 					}
 				}
 			}
 		}
-		//cout << Result << "\n";
-		//cout << Op << endl;
 		i++;
+		cout << i << ")" << Result << "|||||" << Op << "\n";
+	} 
+	while (Op.IsStackEmpty() == false)
+	{
+		Result.AddElement(Op.DeleteElement());
 	}
+	cout << i << ")" << Result << "|||||" << Op << "\n";
 	return Result;
 }
 
@@ -234,7 +238,6 @@ int POS(char *s, char c)
 		if (s[i] == c)
 		{
 			return i;
-
 		}
 		i++;
 	}

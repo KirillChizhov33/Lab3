@@ -88,6 +88,10 @@ public:
 	Stack() {};
 	Stack(int _Size);
 	Stack(const Stack &b);
+	TValue * RetCur()
+	{
+		return Mem[Index];
+	}
 	Stack & operator =(const Stack &b);
 	bool IsStackEmpty();
 	bool IsStackFull();
@@ -191,5 +195,6 @@ public:
 	}
 };
 bool StrCor(char *string);
+
 
 

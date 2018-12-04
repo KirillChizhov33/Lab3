@@ -8,7 +8,9 @@ int main()
 	Stack B(100);//Стек для операций
 	Turn C(100);//Очередь стандартная
 	Turn D(100);//Очередь польская запись
-	char c[100] = "(28-7)*1-(1)-1+23-(67*88)";
+	//char c[100] = "(28-7)*1-(1)-1+23-(67*88)";
+	char c[100] = "(2+3)*5-2";//23+5*2-
+	//char c[100] = "2+3";
 	if (StrCor(c) == false)
 	{
 		cout << "False 1";
@@ -17,13 +19,12 @@ int main()
 	else
 	{
 		TLex R(C);
+		
 		C = R.convert(c);
-		if (C.IsStringCorrect() == false)
-		{
-			cout << "False 2";
-			return 0;
-		}
 		cout << C;
 	}
+	cout << "\n\n" << "Polish:" << endl;
+	A = C.Polish();
+	//cout << A;
 	return 0;
 }

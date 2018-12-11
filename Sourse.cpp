@@ -109,24 +109,16 @@ bool Turn::IsTurnFull()
 	return (LowIndex == (HighIndex + 2) % TSize);
 }
 
-Stack Turn::Polish()
+Turn Turn::Polish()
 {
-	Stack Result(TSize);
+	Turn Result(TSize);
 	Stack Op(TSize);
-	Stack Temp(TSize);
-	Turn test(TSize);
-	TValue * temp1 = new Top('+');
-	TValue * temp2 = new Top('-');
-	TValue * temp3 = new Top('*');
-	TValue * temp4 = new Top('/');
-	TValue * temp5 = new Top('(');
-	TValue * temp6 = new Top(')');
 	int i = LowIndex;
 	while (i != (HighIndex + 1) % TSize)
 	{
 		if ((TMem[i]->prior() == -1))
 		{
-			Result.AddElement(TMem[i]);
+			Result.TAddElement(TMem[i]);
 		}
 		else
 		{
@@ -144,7 +136,7 @@ Stack Turn::Polish()
 				{
 					while ((Op.RetCur())->prior() != 0)
 					{
-						Result.AddElement(Op.DeleteElement());
+						Result.TAddElement(Op.DeleteElement());
 					}
 					Op.DeleteElement();
 				}
@@ -152,9 +144,9 @@ Stack Turn::Polish()
 				{
 					if ((Op.RetCur())->prior() >= 2)
 					{
-						while ((Op.IsStackEmpty() != true)&&(((Op.RetCur())->prior() >= 2) == true))
+						while ((Op.IsStackEmpty() != true) && (((Op.RetCur())->prior() >= 2) == true))
 						{
-							Result.AddElement(Op.DeleteElement());
+							Result.TAddElement(Op.DeleteElement());
 						}
 						Op.AddElement(TMem[i]);
 					}
@@ -167,7 +159,7 @@ Stack Turn::Polish()
 				{
 					if ((Op.RetCur())->prior() == 3)
 					{
-						Result.AddElement(Op.DeleteElement());
+						Result.TAddElement(Op.DeleteElement());
 						Op.AddElement(TMem[i]);
 					}
 					if ((Op.RetCur())->prior() < 3)
@@ -179,13 +171,71 @@ Stack Turn::Polish()
 		}
 		i++;
 		cout << i << ")" << Result << "|||||" << Op << "\n";
-	} 
+	}
 	while (Op.IsStackEmpty() == false)
 	{
-		Result.AddElement(Op.DeleteElement());
+		Result.TAddElement(Op.DeleteElement());
 	}
 	cout << i << ")" << Result << "|||||" << Op << "\n";
 	return Result;
+}
+
+int Turn::ExpressionResult()
+{
+	//int Res = 0;
+	Stack Uber(TSize);
+	int i = LowIndex;
+	TValue * res = new Tint(1);
+	TValue * temp1 = new Tint(1);
+	TValue * temp2 = new Tint(2);
+	while (i != (HighIndex + 1) % TSize)
+	{
+		if((TMem[i]->prior() == -1))
+		{
+			Uber.AddElement(TMem[i]);
+		}
+		else
+		{
+			if (TMem[i]->operation() == 1)
+			{
+				temp1 = Uber.DeleteElement();
+				temp2 = Uber.DeleteElement();
+				int k1(*temp1);
+				int k2(*temp2);
+				Uber.AddElement(new Tint(k1 + k2));
+			}
+			if (TMem[i]->operation() == 2)
+			{
+				temp1 = Uber.DeleteElement();
+				temp2 = Uber.DeleteElement();
+				int k1(*temp1);
+				int k2(*temp2);
+				Uber.AddElement(new Tint(k2 - k1));
+			}
+			if (TMem[i]->operation() == 3)
+			{
+				temp1 = Uber.DeleteElement();
+				temp2 = Uber.DeleteElement();
+				int k1(*temp1);
+				int k2(*temp2);
+				Uber.AddElement(new Tint(k1 * k2));
+			}
+			if (TMem[i]->operation() == 4)
+			{
+				temp1 = Uber.DeleteElement();
+				temp2 = Uber.DeleteElement();
+				int k1(*temp1);
+				int k2(*temp2);
+				Uber.AddElement(new Tint(k2 / k1));
+			}
+		}
+		i++;
+	}
+	TValue * temp = new Tint(2);
+	temp = Uber.DeleteElement();
+	int result(*temp);
+	int Res = result;
+	return Res;
 }
 
 int Turn::TGetSize()

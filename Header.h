@@ -6,10 +6,12 @@ class TValue
 {
 public:
 	TValue() {}
+	virtual int operation() = 0;
 	virtual int prior() = 0;
 	virtual void print(ostream &os) = 0;
 	friend ostream & operator <<(ostream &os, TValue &v);
-	virtual bool operator ==(const TValue & b) { return true; };
+	virtual bool operator ==(const TValue & b) { return true; }
+	virtual operator int() const = 0 ;
 };
 
 
@@ -40,6 +42,25 @@ public:
 			return 1;
 		}
 	}
+	int operation()
+	{
+		if (c == '+')
+		{
+			return 1;
+		}
+		if (c == '-')
+		{
+			return 2;
+		}
+		if (c == '*')
+		{
+			return 3;
+		}
+		if (c == '/')
+		{
+			return 4;
+		}
+	}
 	void print(ostream &os)
 	{
 		os << c;
@@ -51,6 +72,10 @@ public:
 			return true;
 		}
 		return false;
+	}
+	operator int() const
+	{
+		return 21;
 	}
 };
 
@@ -66,6 +91,10 @@ public:
 	{
 		return -1;
 	}
+	int operation()
+	{
+		return 0;
+	}
 	void print(ostream &os)
 	{
 		os << v;
@@ -77,6 +106,10 @@ public:
 			return true;
 		}
 		return false;
+	}
+	operator int() const
+	{
+		return v;
 	}
 };
 class Stack
@@ -101,7 +134,8 @@ public:
 	void DeleteAllElements();
 	friend ostream & operator<<(ostream &os, const Stack &v);
 };
-class Turn 
+
+class Turn
 {
 	TValue ** TMem;
 	int TSize;
@@ -114,7 +148,8 @@ public:
 	bool IsTurnEmpty();
 	bool IsTurnFull();
 	int TGetSize();
-	Stack Polish();
+	Turn Polish();
+	int ExpressionResult();
 	void TAddElement(TValue * Elem);
 	TValue * TDeleteElement();
 	TValue *& operator [](int index);
@@ -195,6 +230,3 @@ public:
 	}
 };
 bool StrCor(char *string);
-
-
-

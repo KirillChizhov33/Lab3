@@ -8,7 +8,7 @@ int main()
 	Stack B(100);//Стек для операций
 	Turn C(100);//Очередь стандартная
 	Turn D(100);//Очередь польская запись
-	char c[100] = "(28-7)*1-12/4*5-(1+3)*23-(67*88)";
+	char c[100] = "(28-7)*1-12/4*5-(1+3)*23-(67*88)";//== −5 982;
 	//char c[100] = "(2+3)*5-2";//23+5*2-
 	//char c[100] = "2+3";
 	if (StrCor(c) == false)
@@ -23,7 +23,9 @@ int main()
 		cout << C;
 	}
 	cout << "\n\n" << "Polish:" << endl;
-	A = C.Polish();
-	cout << A;
+	D = C.Polish();
+	cout << D;
+	int output = D.ExpressionResult();
+	cout <<"\n\n"<< output;
 	return 0;
 }

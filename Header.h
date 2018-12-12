@@ -162,9 +162,9 @@ class TLex
 	Turn queue;
 	std::string s;
 public:
-	TLex(Turn _queue)
+	TLex()
 	{
-		queue = _queue;
+		queue = Turn(100);
 	}
 	int pos(char *s, char c)
 	{

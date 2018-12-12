@@ -18,7 +18,7 @@ int main()
 	}
 	else
 	{
-		TLex R(C);
+		TLex R;
 		C = R.convert(c);
 		cout << C;
 	}

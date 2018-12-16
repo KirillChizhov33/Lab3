@@ -11,7 +11,7 @@ public:
 	virtual void print(ostream &os) = 0;
 	friend ostream & operator <<(ostream &os, TValue &v);
 	virtual bool operator ==(const TValue & b) { return true; }
-	virtual operator int() const = 0 ;
+	virtual operator int() const = 0;
 };
 
 
@@ -137,18 +137,19 @@ public:
 
 class Turn
 {
+public:
 	TValue ** TMem;
 	int TSize;
 	int LowIndex;
 	int HighIndex;
-public:
 	Turn() {};
 	Turn(int _TSize);
 	Turn(const Turn &b);
 	bool IsTurnEmpty();
 	bool IsTurnFull();
 	int TGetSize();
-	Turn Polish();
+	int TGetLowIndex();
+	int TGetHighIndex();
 	int ExpressionResult();
 	void TAddElement(TValue * Elem);
 	TValue * TDeleteElement();
@@ -228,5 +229,10 @@ public:
 		}
 		return queue;
 	}
+};
+class Mex: public Turn
+{
+public:
+	Turn Polish(Turn poland);
 };
 bool StrCor(char *string);

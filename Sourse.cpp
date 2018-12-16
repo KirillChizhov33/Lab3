@@ -109,30 +109,32 @@ bool Turn::IsTurnFull()
 	return (LowIndex == (HighIndex + 2) % TSize);
 }
 
-Turn Turn::Polish()
+Turn Mex::Polish(Turn  Pol)
 {
-	Turn Result(TSize);
-	Stack Op(TSize);
-	int i = LowIndex;
-	while (i != (HighIndex + 1) % TSize)
+	int Size = Pol.TGetSize();
+	int i = Pol.TGetLowIndex();
+	int Highindex = Pol.TGetHighIndex();
+	Turn Result(Size);
+	Stack Op(Size);
+	while (i != (Highindex + 1) % Size)
 	{
-		if ((TMem[i]->prior() == -1))
+		if ((Pol[i]->prior() == -1))
 		{
-			Result.TAddElement(TMem[i]);
+			Result.TAddElement(Pol[i]);
 		}
 		else
 		{
 			if (Op.IsStackEmpty())
 			{
-				Op.AddElement(TMem[i]);
+				Op.AddElement(Pol[i]);
 			}
 			else
 			{
-				if (TMem[i]->prior() == 0)
+				if (Pol[i]->prior() == 0)
 				{
-					Op.AddElement(TMem[i]);
+					Op.AddElement(Pol[i]);
 				}
-				if (TMem[i]->prior() == 1)
+				if (Pol[i]->prior() == 1)
 				{
 					while ((Op.RetCur())->prior() != 0)
 					{
@@ -140,7 +142,7 @@ Turn Turn::Polish()
 					}
 					Op.DeleteElement();
 				}
-				if (TMem[i]->prior() == 2)
+				if (Pol[i]->prior() == 2)
 				{
 					if ((Op.RetCur())->prior() >= 2)
 					{
@@ -148,23 +150,23 @@ Turn Turn::Polish()
 						{
 							Result.TAddElement(Op.DeleteElement());
 						}
-						Op.AddElement(TMem[i]);
+						Op.AddElement(Pol[i]);
 					}
 					if ((Op.RetCur())->prior() == 0)
 					{
-						Op.AddElement(TMem[i]);
+						Op.AddElement(Pol[i]);
 					}
 				}
-				if (TMem[i]->prior() == 3)
+				if (Pol[i]->prior() == 3)
 				{
 					if ((Op.RetCur())->prior() == 3)
 					{
 						Result.TAddElement(Op.DeleteElement());
-						Op.AddElement(TMem[i]);
+						Op.AddElement(Pol[i]);
 					}
 					if ((Op.RetCur())->prior() < 3)
 					{
-						Op.AddElement(TMem[i]);
+						Op.AddElement(Pol[i]);
 					}
 				}
 			}
@@ -182,7 +184,6 @@ Turn Turn::Polish()
 
 int Turn::ExpressionResult()
 {
-	//int Res = 0;
 	Stack Uber(TSize);
 	int i = LowIndex;
 	TValue * res = new Tint(1);
@@ -190,7 +191,7 @@ int Turn::ExpressionResult()
 	TValue * temp2 = new Tint(2);
 	while (i != (HighIndex + 1) % TSize)
 	{
-		if((TMem[i]->prior() == -1))
+		if ((TMem[i]->prior() == -1))
 		{
 			Uber.AddElement(TMem[i]);
 		}
@@ -241,6 +242,14 @@ int Turn::ExpressionResult()
 int Turn::TGetSize()
 {
 	return TSize;
+}
+int Turn::TGetLowIndex()
+{
+	return LowIndex;
+}
+int Turn::TGetHighIndex()
+{
+	return HighIndex;
 }
 void Turn::TAddElement(TValue * Elem)
 {

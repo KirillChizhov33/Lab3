@@ -4,13 +4,11 @@
 #include "Header.h"
 int main()
 {
-	Stack A(100);//Стек для операндов
-	Stack B(100);//Стек для операций
-	Turn C(100);//Очередь стандартная
-	Turn D(100);//Очередь польская запись
+	Turn C(100);
+	Turn D(100);
 	char c[100] = "(28-7)*1-12/4*5-(1+3)*23-(67*88)";//== −5 982;
-													 //char c[100] = "(2+3)*5-2";//23+5*2-
-													 //char c[100] = "2+3";
+	char d[100] = "(12+8)*3/(2+13)+7*4-1";
+	char e[100] = " 2+3*5-9";
 	if (StrCor(c) == false)
 	{
 		cout << "False 1";
@@ -20,13 +18,13 @@ int main()
 	{
 		TLex R;
 		C = R.convert(c);
-		cout << C;
+		cout << "\n\n\n\n";
+		cout << "     1)"<< C;
 	}
 	cout << "\n\n" << "Polish:" << endl;
-	Mex TEST;
-	D = TEST.Polish(C);
+	D = Polish(C);
 	cout << D;
-	int output = D.ExpressionResult();
-	cout << "\n\n" << output;
+	int output = ExpressionResult(D);
+	cout << " = " << output << "\n"<<endl;
 	return 0;
 }

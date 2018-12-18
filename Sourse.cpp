@@ -60,10 +60,6 @@ TValue * Stack::DeleteElement()
 	Index--;
 	return Mem[Index + 1];
 }
-void Stack::DeleteAllElements()
-{
-	Index = -1;
-}
 ostream & operator<<(ostream &os, const Stack &v)
 {
 	for (int i = 0; i < v.Index + 1; i++)
@@ -109,7 +105,7 @@ bool Turn::IsTurnFull()
 	return (LowIndex == (HighIndex + 2) % TSize);
 }
 
-Turn Mex::Polish(Turn  Pol)
+Turn Polish(Turn  Pol)
 {
 	int Size = Pol.TGetSize();
 	int i = Pol.TGetLowIndex();
@@ -182,22 +178,24 @@ Turn Mex::Polish(Turn  Pol)
 	return Result;
 }
 
-int Turn::ExpressionResult()
+int ExpressionResult(Turn Pol)
 {
-	Stack Uber(TSize);
-	int i = LowIndex;
+	int Size = Pol.TGetSize();
+	int i = Pol.TGetLowIndex();
+	int Highindex = Pol.TGetHighIndex();
+	Stack Uber(Size);
 	TValue * res = new Tint(1);
 	TValue * temp1 = new Tint(1);
 	TValue * temp2 = new Tint(2);
-	while (i != (HighIndex + 1) % TSize)
+	while (i != (Highindex + 1) % Size)
 	{
-		if ((TMem[i]->prior() == -1))
+		if ((Pol[i]->prior() == -1))
 		{
-			Uber.AddElement(TMem[i]);
+			Uber.AddElement(Pol[i]);
 		}
 		else
 		{
-			if (TMem[i]->operation() == 1)
+			if (Pol[i]->operation() == 1)
 			{
 				temp1 = Uber.DeleteElement();
 				temp2 = Uber.DeleteElement();
@@ -205,7 +203,7 @@ int Turn::ExpressionResult()
 				int k2(*temp2);
 				Uber.AddElement(new Tint(k1 + k2));
 			}
-			if (TMem[i]->operation() == 2)
+			if (Pol[i]->operation() == 2)
 			{
 				temp1 = Uber.DeleteElement();
 				temp2 = Uber.DeleteElement();
@@ -213,7 +211,7 @@ int Turn::ExpressionResult()
 				int k2(*temp2);
 				Uber.AddElement(new Tint(k2 - k1));
 			}
-			if (TMem[i]->operation() == 3)
+			if (Pol[i]->operation() == 3)
 			{
 				temp1 = Uber.DeleteElement();
 				temp2 = Uber.DeleteElement();
@@ -221,7 +219,7 @@ int Turn::ExpressionResult()
 				int k2(*temp2);
 				Uber.AddElement(new Tint(k1 * k2));
 			}
-			if (TMem[i]->operation() == 4)
+			if (Pol[i]->operation() == 4)
 			{
 				temp1 = Uber.DeleteElement();
 				temp2 = Uber.DeleteElement();

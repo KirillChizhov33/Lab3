@@ -1,4 +1,3 @@
-#pragma once
 #include <string>
 #include <iostream>
 using namespace std;
@@ -131,17 +130,16 @@ public:
 	int GetSize();
 	void AddElement(TValue *Elem);
 	TValue * DeleteElement();
-	void DeleteAllElements();
 	friend ostream & operator<<(ostream &os, const Stack &v);
 };
 
 class Turn
 {
-public:
-	TValue ** TMem;
+	TValue * * TMem;
 	int TSize;
 	int LowIndex;
 	int HighIndex;
+public:
 	Turn() {};
 	Turn(int _TSize);
 	Turn(const Turn &b);
@@ -150,7 +148,6 @@ public:
 	int TGetSize();
 	int TGetLowIndex();
 	int TGetHighIndex();
-	int ExpressionResult();
 	void TAddElement(TValue * Elem);
 	TValue * TDeleteElement();
 	TValue *& operator [](int index);
@@ -230,9 +227,6 @@ public:
 		return queue;
 	}
 };
-class Mex: public Turn
-{
-public:
-	Turn Polish(Turn poland);
-};
+int ExpressionResult(Turn poland);
+Turn Polish(Turn poland);
 bool StrCor(char *string);
